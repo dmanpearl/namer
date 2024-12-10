@@ -33,11 +33,14 @@ class _SettingsPageState extends State<SettingsPage> {
       menuItems.add(item);
     }
 
+    DataCell createLabel(String label) =>
+        DataCell(SizedBox(width: 80, child: Text(label)));
+
     List<DataRow> createRows() {
       return [
         DataRow(cells: [
           // Favorites
-          DataCell(Text("Favorites:")),
+          createLabel("Favorites:"),
           DataCell(ElevatedButton.icon(
             onPressed: favoriteCount == 0
                 ? null
@@ -62,7 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
         // Case Style
         DataRow(cells: [
-          DataCell(Text("Case Style:")),
+          createLabel("Case Style:"),
           DataCell(PopupMenuButton(
             onSelected: (value) {
               appState.setPairStyle(value);
