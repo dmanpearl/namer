@@ -28,17 +28,21 @@ class BigCard extends StatelessWidget {
         color: theme.colorScheme.primary,
         child: SizedBox(
           width: double.infinity,
+          height: 94,
           child: Column(
             // todo: The reason for a Column in this case is to center the text with
             // CrossAxisAlignment.center. Find a way without the column.
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.all(20),
-                child: Text(
-                  pairToString(pair, appState.pairStyleIndex),
-                  style: style,
-                  semanticsLabel: "${pair.first} ${pair.second}",
+                child: FittedBox(
+                  child: Text(
+                    pairToString(pair, appState.pairStyleIndex),
+                    style: style,
+                    semanticsLabel: "${pair.first} ${pair.second}",
+                  ),
                 ),
               ),
             ],
