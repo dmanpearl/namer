@@ -32,19 +32,26 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+  var history = <WordPair>[];
+
+  GlobalKey? historyListKey;
 
   void getNext() {
+    history.insert(0, current);
+    var animatedList = historyListKey?.currentState as AnimatedListState?;
+    animatedList?.insertItem(0);
     current = WordPair.random();
     notifyListeners();
   }
 
   var favorites = <WordPair>[];
 
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
+  void toggleFavorite([WordPair? pair]) {
+    pair = pair ?? current;
+    if (favorites.contains(pair)) {
+      favorites.remove(pair);
     } else {
-      favorites.add(current);
+      favorites.add(pair);
     }
     notifyListeners();
   }
@@ -65,6 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+
     var pages = [
       GeneratorPage(),
       FavoritesPage(),
@@ -74,6 +83,17 @@ class _MyHomePageState extends State<MyHomePage> {
       throw UnimplementedError('no widget for selected index: $selectedIndex');
     }
     var page = pages[selectedIndex];
+
+    // The container for the current page, with its background color
+    // and subtle switching animation.
+    var mainArea = ColoredBox(
+      // todo: replace with surfaceContainerHighest
+      color: colorScheme.surfaceVariant,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 200),
+        child: page,
+      ),
+    );
 
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
@@ -104,12 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
-            Expanded(
-              child: Container(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                child: page,
-              ),
-            ),
+            Expanded(child: mainArea),
           ],
         ),
       );
