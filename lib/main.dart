@@ -37,7 +37,13 @@ class MyAppState extends ChangeNotifier {
   GlobalKey? historyListKey;
 
   void getNext() {
+    // Insert the current pair into history, and limit the total size of the history buffer.
+    const historyMax = 100;
+    if (history.length >= historyMax) {
+      history.removeRange(historyMax - 1, history.length);
+    }
     history.insert(0, current);
+
     var animatedList = historyListKey?.currentState as AnimatedListState?;
     animatedList?.insertItem(0);
     current = WordPair.random();

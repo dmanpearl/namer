@@ -142,6 +142,9 @@ class _HistoryListViewState extends State<HistoryListView> {
         padding: EdgeInsets.only(top: 100),
         initialItemCount: appState.history.length,
         itemBuilder: (context, index, animation) {
+          if (index >= appState.history.length) {
+            return SizeTransition(sizeFactor: animation);
+          }
           final pair = appState.history[index];
           return SizeTransition(
             sizeFactor: animation,

@@ -13,6 +13,7 @@ class _SettingsPageState extends State<SettingsPage> {
   var selectedIndex = 0;
   var example = "";
   var favoriteCount = 0;
+  var historyCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
     selectedIndex = appState.pairStyleIndex;
     example = pairToString(appState.current, selectedIndex);
     favoriteCount = appState.favorites.length;
+    historyCount = appState.history.length;
 
     var menuItems = <PopupMenuItem>[];
     for (var idx = 0; idx < pairStyles.length; idx++) {
@@ -38,6 +40,32 @@ class _SettingsPageState extends State<SettingsPage> {
 
     List<DataRow> createRows() {
       return [
+        DataRow(cells: [
+          // History
+          createLabel("History:"),
+          DataCell(ElevatedButton.icon(
+            onPressed: historyCount == 0
+                ? null
+                : () {
+                    showAlertDialog(
+                      context,
+                      "Alert", // Alert title
+                      "Are you sure you want to delete $historyCount history ${historyCount == 1 ? "record" : "records"}? This cannot be undone.",
+                      () {
+                        // Callback executed on user confirmation.
+                        appState.history = []; // Clear the app history
+                        setState(() {
+                          historyCount = 0; // Force rerender
+                        });
+                      },
+                    );
+                  },
+            label: Text("$historyCount"),
+            icon: Icon(Icons.delete_forever),
+          )),
+        ]),
+
+        // Case Style
         DataRow(cells: [
           // Favorites
           createLabel("Favorites:"),
@@ -58,7 +86,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                     );
                   },
-            label: Text("Delete All ($favoriteCount)"),
+            label: Text("$favoriteCount"),
             icon: Icon(Icons.delete_forever),
           )),
         ]),
