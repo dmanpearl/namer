@@ -13,8 +13,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
   var favorites = [];
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    favorites = appState.favorites;
+    final appState = context.watch<MyAppState>();
+    favorites = appState.getFavorites();
+    final int pairStyle = appState.getPairStyle();
 
     if (favorites.isEmpty) {
       return Center(
@@ -34,15 +35,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
         for (var pair in favorites)
           ListTile(
             leading: Icon(Icons.favorite),
-            title: Text(pairToString(pair, appState.pairStyleIndex)),
+            title: Text(pairToString(pair, pairStyle)),
             trailing: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
               ),
               onPressed: () {
-                appState.favorites.removeWhere((fav) => fav == pair);
-                setState(() => favorites = appState.favorites);
+                setState(() => favorites = appState.removeFavorite(pair));
               },
               child: Icon(Icons.close),
             ),

@@ -4,9 +4,12 @@ import 'package:provider/provider.dart';
 
 import 'favorites_page.dart';
 import 'generate_page.dart';
+import 'persist_local.dart';
 import 'settings_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await sharedPrefs.init();
   runApp(MyApp());
 }
 
@@ -31,40 +34,93 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
-  var history = <WordPair>[];
+  // Initial values may be overwritten by stored shared preferences
+  var _current = WordPair.random();
+  var _history = <WordPair>[];
+  var _favorites = <WordPair>[];
+  var _pairStyle = 0;
 
   GlobalKey? historyListKey;
 
-  void getNext() {
-    // Insert the current pair into history, and limit the total size of the history buffer.
-    const historyMax = 100;
-    if (history.length >= historyMax) {
-      history.removeRange(historyMax - 1, history.length);
+  MyAppState() {
+    // Load stored state from shared preferences
+    final (current, favorites, history, pairStyle) = sharedPrefs.readAll();
+    if (current != WordPair("m", "t")) {
+      // Saved current is not empty, use it instead of the new random pair
+      _current = current;
     }
-    history.insert(0, current);
+    setCurrent(_current);
+    _favorites = favorites;
+    _history = history;
+    setPairStyle(pairStyle);
+  }
 
+  // _current
+  WordPair getCurrent() => _current;
+  void setCurrent(WordPair pair) {
+    _current = pair;
+    sharedPrefs.saveCurrent(_current);
+  }
+
+  void getNext() {
+    addHistory(getCurrent());
     var animatedList = historyListKey?.currentState as AnimatedListState?;
     animatedList?.insertItem(0);
-    current = WordPair.random();
+    setCurrent(WordPair.random()); // Generate next WordPair
     notifyListeners();
   }
 
-  var favorites = <WordPair>[];
-
-  void toggleFavorite([WordPair? pair]) {
-    pair = pair ?? current;
-    if (favorites.contains(pair)) {
-      favorites.remove(pair);
-    } else {
-      favorites.add(pair);
+  // _history
+  List<WordPair> getHistory() => _history;
+  // Insert the current pair into history, and limit the total size of the history buffer.
+  void addHistory(WordPair pair) {
+    const historyMax = 100;
+    if (_history.length >= historyMax) {
+      _history.removeRange(historyMax - 1, _history.length);
     }
+    _history.insert(0, getCurrent());
+    sharedPrefs.saveHistory(_history);
     notifyListeners();
   }
 
-  var pairStyleIndex = 0;
+  void clearHistory() {
+    _history = [];
+    sharedPrefs.saveHistory(_history);
+    notifyListeners();
+  }
+
+  // _favorites
+  List<WordPair> getFavorites() => _favorites;
+  void toggleFavorite([WordPair? pair]) {
+    pair = pair ?? getCurrent();
+    if (_favorites.contains(pair)) {
+      _favorites.remove(pair);
+    } else {
+      _favorites.add(pair);
+    }
+    sharedPrefs.saveFavorites(_favorites);
+    notifyListeners();
+  }
+
+  List<WordPair> removeFavorite(WordPair pair) {
+    _favorites.removeWhere((favorite) => favorite == pair);
+    sharedPrefs.saveFavorites(_favorites);
+    notifyListeners();
+    return _favorites;
+  }
+
+  void clearFavorites() {
+    _favorites = [];
+    sharedPrefs.saveFavorites(_favorites);
+    notifyListeners();
+  }
+
+  // _pairStyle
+  int getPairStyle() => _pairStyle;
   void setPairStyle(int value) {
-    pairStyleIndex = value;
+    _pairStyle = value;
+    sharedPrefs.savePairStyle(value);
+    notifyListeners();
   }
 }
 
@@ -93,8 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // The container for the current page, with its background color
     // and subtle switching animation.
     var mainArea = ColoredBox(
-      // todo: replace with surfaceContainerHighest
-      color: colorScheme.surfaceVariant,
+      color: colorScheme.surfaceContainerHighest,
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 200),
         child: page,

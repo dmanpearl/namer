@@ -17,11 +17,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    selectedIndex = appState.pairStyleIndex;
-    example = pairToString(appState.current, selectedIndex);
-    favoriteCount = appState.favorites.length;
-    historyCount = appState.history.length;
+    final appState = context.watch<MyAppState>();
+    final current = appState.getCurrent();
+    final history = appState.getHistory();
+    final favorites = appState.getFavorites();
+    final int pairStyle = appState.getPairStyle();
+    selectedIndex = pairStyle;
+    example = pairToString(current, selectedIndex);
+    favoriteCount = favorites.length;
+    historyCount = history.length;
 
     var menuItems = <PopupMenuItem>[];
     for (var idx = 0; idx < pairStyles.length; idx++) {
@@ -29,7 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
         value: idx,
         child: StyleMenuItem(
           pairStyle: pairStyles[idx],
-          example: pairToString(appState.current, idx),
+          example: pairToString(current, idx),
         ),
       );
       menuItems.add(item);
@@ -53,10 +57,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       "Are you sure you want to delete $historyCount history ${historyCount == 1 ? "record" : "records"}? This cannot be undone.",
                       () {
                         // Callback executed on user confirmation.
-                        appState.history = []; // Clear the app history
-                        setState(() {
-                          historyCount = 0; // Force rerender
-                        });
+                        appState.clearHistory();
+                        setState(() => historyCount = 0); // Force rerender
                       },
                     );
                   },
@@ -79,10 +81,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       "Are you sure you want to delete $favoriteCount ${favoriteCount == 1 ? "favorite" : "favorites"}? This cannot be undone.",
                       () {
                         // Callback executed on user confirmation.
-                        appState.favorites = []; // Clear the app favorites
-                        setState(() {
-                          favoriteCount = 0; // Force rerender
-                        });
+                        appState.clearFavorites();
+                        setState(() => favoriteCount = 0); // Force rerender
                       },
                     );
                   },
@@ -99,13 +99,13 @@ class _SettingsPageState extends State<SettingsPage> {
               appState.setPairStyle(value);
               setState(() {
                 selectedIndex = value;
-                example = pairToString(appState.current, selectedIndex);
+                example = pairToString(current, selectedIndex);
               });
             },
             itemBuilder: (BuildContext bc) {
               return menuItems;
             },
-            initialValue: appState.pairStyleIndex,
+            initialValue: pairStyle,
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(19))),

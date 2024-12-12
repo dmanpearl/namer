@@ -16,6 +16,7 @@ class BigCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
+    int pairStyle = appState.getPairStyle();
 
     final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!.copyWith(
@@ -39,7 +40,7 @@ class BigCard extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: FittedBox(
                   child: Text(
-                    pairToString(pair, appState.pairStyleIndex),
+                    pairToString(pair, pairStyle),
                     style: style,
                     semanticsLabel: "${pair.first} ${pair.second}",
                   ),
@@ -56,11 +57,12 @@ class BigCard extends StatelessWidget {
 class GeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    var pair = appState.current;
+    final appState = context.watch<MyAppState>();
+    final WordPair current = appState.getCurrent();
+    final favorites = appState.getFavorites();
 
     IconData icon;
-    if (appState.favorites.contains(pair)) {
+    if (favorites.contains(current)) {
       icon = Icons.favorite;
     } else {
       icon = Icons.favorite_border;
@@ -75,7 +77,7 @@ class GeneratorPage extends StatelessWidget {
             child: HistoryListView(),
           ),
           SizedBox(height: 10),
-          BigCard(pair: pair),
+          BigCard(pair: current),
           SizedBox(height: 10),
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -129,6 +131,9 @@ class _HistoryListViewState extends State<HistoryListView> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MyAppState>();
+    final history = appState.getHistory();
+    final favorites = appState.getFavorites();
+    final int pairStyle = appState.getPairStyle();
     appState.historyListKey = _key;
 
     return ShaderMask(
@@ -140,12 +145,12 @@ class _HistoryListViewState extends State<HistoryListView> {
         key: _key,
         reverse: true,
         padding: EdgeInsets.only(top: 100),
-        initialItemCount: appState.history.length,
+        initialItemCount: history.length,
         itemBuilder: (context, index, animation) {
-          if (index >= appState.history.length) {
+          if (index >= history.length) {
             return SizeTransition(sizeFactor: animation);
           }
-          final pair = appState.history[index];
+          final pair = history[index];
           return SizeTransition(
             sizeFactor: animation,
             child: Center(
@@ -153,11 +158,11 @@ class _HistoryListViewState extends State<HistoryListView> {
                 onPressed: () {
                   appState.toggleFavorite(pair);
                 },
-                icon: appState.favorites.contains(pair)
+                icon: favorites.contains(pair)
                     ? Icon(Icons.favorite, size: 12)
                     : SizedBox(),
                 label: Text(
-                  pairToString(pair, appState.pairStyleIndex),
+                  pairToString(pair, pairStyle),
                   semanticsLabel: pair.asPascalCase,
                 ),
               ),
