@@ -11,7 +11,7 @@ const pairStyles = [
   "SCREAMING_SNAKE",
   "kebab-case",
   "UPPERCASE",
-  "sp ace",
+  "space cace",
 ];
 
 String pairToString(WordPair pair, int styleIdx) {
