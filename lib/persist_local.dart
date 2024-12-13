@@ -1,6 +1,8 @@
 import 'package:english_words/english_words.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'utils.dart';
+
 class SharedPrefs {
   late final SharedPreferences _sharedPrefs;
 
@@ -11,7 +13,7 @@ class SharedPrefs {
   WordPair deserializeOne(String s) {
     final List<String> tokens = s.split("--");
     if (tokens.length < 2) {
-      return WordPair("m", "t"); // Empty
+      return emptyWordPair;
     }
     return WordPair(tokens[0], tokens[1]);
   }
@@ -48,7 +50,7 @@ class SharedPrefs {
     // current
     final WordPair current = _sharedPrefs.containsKey('current')
         ? deserializeOne(_sharedPrefs.getString('current')!)
-        : WordPair("m", "t");
+        : emptyWordPair;
 
     // favorites
     final List<WordPair> favorites = _sharedPrefs.containsKey('favorites')

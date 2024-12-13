@@ -6,6 +6,7 @@ import 'favorites_page.dart';
 import 'generate_page.dart';
 import 'persist_local.dart';
 import 'settings_page.dart';
+import 'utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +46,7 @@ class MyAppState extends ChangeNotifier {
   MyAppState() {
     // Load stored state from shared preferences
     final (current, favorites, history, pairStyle) = sharedPrefs.readAll();
-    if (current != WordPair("m", "t")) {
+    if (current != emptyWordPair) {
       // Saved current is not empty, use it instead of the new random pair
       _current = current;
     }

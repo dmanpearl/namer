@@ -1,5 +1,7 @@
 import 'package:english_words/english_words.dart';
 
+final WordPair emptyWordPair = WordPair("m", "t");
+
 const pairStyles = [
   "none",
   "camelCase",
