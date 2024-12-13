@@ -10,30 +10,26 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  var selectedIndex = 0;
-  var example = "";
-  var favoriteCount = 0;
-  var historyCount = 0;
+  int selectedIndex = 0;
+  String example = "";
+  int favoriteCount = 0;
+  int historyCount = 0;
 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MyAppState>();
-    final current = appState.getCurrent();
-    final history = appState.getHistory();
-    final favorites = appState.getFavorites();
-    final int pairStyle = appState.getPairStyle();
-    selectedIndex = pairStyle;
-    example = pairToString(current, selectedIndex);
-    favoriteCount = favorites.length;
-    historyCount = history.length;
+    selectedIndex = appState.pairStyle;
+    example = pairToString(appState.current, selectedIndex);
+    favoriteCount = appState.favorites.length;
+    historyCount = appState.history.length;
 
-    var menuItems = <PopupMenuItem>[];
+    final menuItems = <PopupMenuItem>[];
     for (var idx = 0; idx < pairStyles.length; idx++) {
       final item = PopupMenuItem(
         value: idx,
         child: StyleMenuItem(
           pairStyle: pairStyles[idx],
-          example: pairToString(current, idx),
+          example: pairToString(appState.current, idx),
         ),
       );
       menuItems.add(item);
@@ -96,16 +92,16 @@ class _SettingsPageState extends State<SettingsPage> {
           createLabel("Case Style:"),
           DataCell(PopupMenuButton(
             onSelected: (value) {
-              appState.setPairStyle(value);
+              appState.pairStyle = value;
               setState(() {
                 selectedIndex = value;
-                example = pairToString(current, selectedIndex);
+                example = pairToString(appState.current, selectedIndex);
               });
             },
             itemBuilder: (BuildContext bc) {
               return menuItems;
             },
-            initialValue: pairStyle,
+            initialValue: appState.pairStyle,
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(19))),

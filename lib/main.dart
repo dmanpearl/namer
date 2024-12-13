@@ -36,50 +36,50 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   // Initial values may be overwritten by stored shared preferences
-  var _current = WordPair.random();
-  var _history = <WordPair>[];
-  var _favorites = <WordPair>[];
-  var _pairStyle = 0;
+  WordPair _current = WordPair.random();
+  List<WordPair> _history = <WordPair>[];
+  List<WordPair> _favorites = <WordPair>[];
+  int _pairStyle = 0;
 
   GlobalKey? historyListKey;
 
   MyAppState() {
     // Load stored state from shared preferences
-    final (current, favorites, history, pairStyle) = sharedPrefs.readAll();
-    if (current != emptyWordPair) {
+    final (cr, fv, hs, ps) = sharedPrefs.readAll();
+    if (cr != emptyWordPair) {
       // Saved current is not empty, use it instead of the new random pair
-      _current = current;
+      current = cr;
     }
-    setCurrent(_current);
-    _favorites = favorites;
-    _history = history;
-    setPairStyle(pairStyle);
+    current = _current; // Forces sharedPrefs.saveCurrent
+    _favorites = fv;
+    _history = hs;
+    pairStyle = ps;
   }
 
   // _current
-  WordPair getCurrent() => _current;
-  void setCurrent(WordPair pair) {
-    _current = pair;
-    sharedPrefs.saveCurrent(_current);
+  WordPair get current => _current;
+  set current(WordPair value) {
+    _current = value;
+    sharedPrefs.saveCurrent(value);
   }
 
   void getNext() {
-    addHistory(getCurrent());
+    addHistory(current);
     var animatedList = historyListKey?.currentState as AnimatedListState?;
     animatedList?.insertItem(0);
-    setCurrent(WordPair.random()); // Generate next WordPair
+    current = WordPair.random(); // Generate next WordPair
     notifyListeners();
   }
 
   // _history
-  List<WordPair> getHistory() => _history;
+  List<WordPair> get history => _history;
   // Insert the current pair into history, and limit the total size of the history buffer.
   void addHistory(WordPair pair) {
     const historyMax = 100;
     if (_history.length >= historyMax) {
       _history.removeRange(historyMax - 1, _history.length);
     }
-    _history.insert(0, getCurrent());
+    _history.insert(0, current);
     sharedPrefs.saveHistory(_history);
     notifyListeners();
   }
@@ -91,9 +91,9 @@ class MyAppState extends ChangeNotifier {
   }
 
   // _favorites
-  List<WordPair> getFavorites() => _favorites;
+  List<WordPair> get favorites => _favorites;
   void toggleFavorite([WordPair? pair]) {
-    pair = pair ?? getCurrent();
+    pair = pair ?? current;
     if (_favorites.contains(pair)) {
       _favorites.remove(pair);
     } else {
@@ -117,8 +117,8 @@ class MyAppState extends ChangeNotifier {
   }
 
   // _pairStyle
-  int getPairStyle() => _pairStyle;
-  void setPairStyle(int value) {
+  int get pairStyle => _pairStyle;
+  set pairStyle(int value) {
     _pairStyle = value;
     sharedPrefs.savePairStyle(value);
     notifyListeners();

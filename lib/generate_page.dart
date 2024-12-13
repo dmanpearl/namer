@@ -16,7 +16,6 @@ class BigCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    int pairStyle = appState.getPairStyle();
 
     final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!.copyWith(
@@ -40,7 +39,7 @@ class BigCard extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: FittedBox(
                   child: Text(
-                    pairToString(pair, pairStyle),
+                    pairToString(pair, appState.pairStyle),
                     style: style,
                     semanticsLabel: "${pair.first} ${pair.second}",
                   ),
@@ -58,11 +57,9 @@ class GeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MyAppState>();
-    final WordPair current = appState.getCurrent();
-    final favorites = appState.getFavorites();
 
     IconData icon;
-    if (favorites.contains(current)) {
+    if (appState.favorites.contains(appState.current)) {
       icon = Icons.favorite;
     } else {
       icon = Icons.favorite_border;
@@ -77,7 +74,7 @@ class GeneratorPage extends StatelessWidget {
             child: HistoryListView(),
           ),
           SizedBox(height: 10),
-          BigCard(pair: current),
+          BigCard(pair: appState.current),
           SizedBox(height: 10),
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -137,9 +134,6 @@ class _HistoryListViewState extends State<HistoryListView> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MyAppState>();
-    final history = appState.getHistory();
-    final favorites = appState.getFavorites();
-    final int pairStyle = appState.getPairStyle();
     appState.historyListKey = _key;
 
     return ShaderMask(
@@ -151,12 +145,12 @@ class _HistoryListViewState extends State<HistoryListView> {
         key: _key,
         reverse: true,
         padding: EdgeInsets.only(top: 100),
-        initialItemCount: history.length,
+        initialItemCount: appState.history.length,
         itemBuilder: (context, index, animation) {
-          if (index >= history.length) {
+          if (index >= appState.history.length) {
             return SizeTransition(sizeFactor: animation);
           }
-          final pair = history[index];
+          final pair = appState.history[index];
           return SizeTransition(
             sizeFactor: animation,
             child: Center(
@@ -164,11 +158,11 @@ class _HistoryListViewState extends State<HistoryListView> {
                 onPressed: () {
                   appState.toggleFavorite(pair);
                 },
-                icon: favorites.contains(pair)
+                icon: appState.favorites.contains(pair)
                     ? Icon(Icons.favorite, size: 12)
                     : SizedBox(),
                 label: Text(
-                  pairToString(pair, pairStyle),
+                  pairToString(pair, appState.pairStyle),
                   semanticsLabel: pair.asPascalCase,
                 ),
               ),

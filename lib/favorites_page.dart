@@ -10,21 +10,18 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
-  var favorites = [];
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MyAppState>();
-    favorites = appState.getFavorites();
-    final int pairStyle = appState.getPairStyle();
 
-    if (favorites.isEmpty) {
+    if (appState.favorites.isEmpty) {
       return Center(
         child: Text('No favorites yet'),
       );
     }
 
-    var units = favorites.length == 1 ? "favorite" : "favorites";
-    var title = '${favorites.length} $units';
+    var units = appState.favorites.length == 1 ? "favorite" : "favorites";
+    var title = '${appState.favorites.length} $units';
 
     return ListView(
       children: [
@@ -32,17 +29,17 @@ class _FavoritesPageState extends State<FavoritesPage> {
           padding: const EdgeInsets.all(20),
           child: Text(title, style: Theme.of(context).textTheme.titleLarge),
         ),
-        for (var pair in favorites)
+        for (var pair in appState.favorites)
           ListTile(
             leading: Icon(Icons.favorite),
-            title: Text(pairToString(pair, pairStyle)),
+            title: Text(pairToString(pair, appState.pairStyle)),
             trailing: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
               ),
               onPressed: () {
-                setState(() => favorites = appState.removeFavorite(pair));
+                appState.removeFavorite(pair);
               },
               child: Icon(Icons.close),
             ),
