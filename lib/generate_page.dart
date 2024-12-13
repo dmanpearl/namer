@@ -99,7 +99,13 @@ class GeneratorPage extends StatelessWidget {
               ),
             ],
           ),
-          Spacer(flex: 2),
+          SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            child: SizedBox(
+                width: 140, child: Image.asset('assets/images/namer.png')),
+          ),
+          Spacer(flex: 1),
         ],
       ),
     );
