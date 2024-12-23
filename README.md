@@ -1,10 +1,35 @@
 # namer
 
-A new Flutter project.
+A Flutter/Dart app to choose and bookmark compound names based on Flutter's tutorial
 
-## Getting Started
+# Run on physical iOS iPhone device from command line:
 
-This project is a starting point for a Flutter application.
+1. List devices
+
+		flutter devices
+			Found 4 connected devices:
+			  David’s iPhone (mobile) • 00008030-00050DC61AB9802E            • ios            • iOS 18.1.1 22B91
+			  iPhone 16 Plus (mobile) • 0B387A7C-8371-40DB-8E57-1BBF7E790DDA • ios            • com.apple.CoreSimulator.SimRuntime.iOS-18-1 (simulator)
+			  macOS (desktop)         • macos                                • darwin-x64     • macOS 15.1.1 24B91 darwin-x64
+			  Chrome (web)            • chrome                               • web-javascript • Google Chrome 131.0.6778.205
+			Found 1 wirelessly connected device:
+			  David’s iPhone (mobile) • 00008030-00050DC61AB9802E • ios • iOS 18.1.1 22B91
+
+1. Install from console:
+
+		flutter run --release -d "David’s iPhone"
+			Launching lib/main.dart on David’s iPhone in release mode...
+			Automatically signing iOS for device deployment using specified development team in Xcode project: 33V4F5LWJ6
+			Running Xcode build...
+
+1. Enable trust on device
+
+	If device displays: "Untrusted Developer: Your device management settings to not allow apps from developer..."
+
+	iPhone > Settings > VPN & Device Management > Developer App > you.name@domain.com > Allow Apps from... > Allow
+
+# Flutter resources
+
 
 A few resources to get you started if this is your first Flutter project:
 
