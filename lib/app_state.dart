@@ -12,7 +12,10 @@ import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'persist_local.dart';
 import 'utils.dart';
+import 'utils_logger.dart';
 import 'utils_serialize.dart';
+
+var logger = getLogger();
 
 class AppState extends ChangeNotifier {
   // Initial values may be overwritten by stored shared preferences
@@ -162,7 +165,7 @@ class AppState extends ChangeNotifier {
       if (user == null) {
         // Logged Out
         _loggedIn = false;
-        print('app_state - FirebaseAuth - LOGOUT');
+        logger.d('app_state - FirebaseAuth - LOGOUT');
         if (_currentSubscription != Null) {
           (_currentSubscription as StreamSubscription).cancel();
         }
@@ -181,7 +184,7 @@ class AppState extends ChangeNotifier {
 
       // Logged In
       _loggedIn = true;
-      print(
+      logger.d(
           'app_state - FirebaseAuth - LOGIN - user: ${user.displayName}, listening...');
       _currentSubscription = FirebaseFirestore.instance
           .collection('current')
@@ -195,7 +198,7 @@ class AppState extends ChangeNotifier {
           if (current == incoming) {
             continue;
           }
-          print(
+          logger.i(
               'app_state - listen - current - change "$current" to "$incoming"');
           current = incoming;
           notifyListeners();
@@ -215,7 +218,7 @@ class AppState extends ChangeNotifier {
           if (listEquals(history, incoming)) {
             continue;
           }
-          print(
+          logger.i(
               'app_state - listen - history - change "$history" to "$incoming"');
           history = incoming;
           notifyListeners();
@@ -235,7 +238,7 @@ class AppState extends ChangeNotifier {
           if (listEquals(favorites, incoming)) {
             continue;
           }
-          print(
+          logger.i(
               'app_state - listen - favorites - change "$favorites" to "$incoming"');
           favorites = incoming;
           notifyListeners();
@@ -254,7 +257,7 @@ class AppState extends ChangeNotifier {
           if (pairStyle == incoming) {
             continue;
           }
-          print(
+          logger.i(
               'app_state - listen - pairStyle - change "$pairStyle" to "$incoming"');
           pairStyle = incoming;
         }

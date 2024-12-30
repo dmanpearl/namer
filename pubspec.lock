@@ -302,7 +302,7 @@ packages:
     source: hosted
     version: "4.0.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
@@ -341,6 +341,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  logger:
+    dependency: "direct main"
+    description:
+      name: logger
+      sha256: be4b23575aac7ebf01f225a241eb7f6b5641eeaf43c6a8613510fc2f8cf187d1
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.0"
   logging:
     dependency: transitive
     description:

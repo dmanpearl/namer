@@ -26,13 +26,14 @@ A Flutter/Dart app to choose and bookmark compound names based on Flutter's tuto
 
 	If device displays: "Untrusted Developer: Your device management settings to not allow apps from developer..."
 
-	iPhone > Settings > VPN & Device Management > Developer App > you.name@domain.com > Allow Apps from... > Allow
+	iPhone > Settings > General > VPN & Device Management > Developer App > you.name@domain.com > Allow Apps from... > Allow
 
 # TODO
 
-- Use logging instead of print.
-- Navigate from Signout screen back to main.
-- Deploy to Apple App Store.
+[✓] Use logging instead of print.
+[ ] On app startup, prioritize sync from Firestore over Perstent Storage.
+[ ] Provide Navigate from Signout screen back to main.
+[ ] Deploy to Apple App Store.
 
 # Flutter resources
 
