@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'main.dart';
+import 'app_state.dart';
 import 'utils.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -17,7 +17,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<MyAppState>();
+    final appState = context.watch<AppState>();
     selectedIndex = appState.pairStyle;
     example = pairToString(appState.current, selectedIndex);
     favoriteCount = appState.favorites.length;
@@ -55,6 +55,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         // Callback executed on user confirmation.
                         appState.clearHistory();
                         setState(() => historyCount = 0); // Force rerender
+                        const snackBar =
+                            SnackBar(content: Text("History cleared"));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       },
                     );
                   },
@@ -79,6 +82,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         // Callback executed on user confirmation.
                         appState.clearFavorites();
                         setState(() => favoriteCount = 0); // Force rerender
+                        const snackBar =
+                            SnackBar(content: Text("Favorites cleared"));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       },
                     );
                   },

@@ -28,8 +28,13 @@ A Flutter/Dart app to choose and bookmark compound names based on Flutter's tuto
 
 	iPhone > Settings > VPN & Device Management > Developer App > you.name@domain.com > Allow Apps from... > Allow
 
-# Flutter resources
+# TODO
 
+- Use logging instead of print.
+- Navigate from Signout screen back to main.
+- Deploy to Apple App Store.
+
+# Flutter resources
 
 A few resources to get you started if this is your first Flutter project:
 

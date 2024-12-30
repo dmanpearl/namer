@@ -42,60 +42,9 @@ sips -Z 76 "$src" --out "$dst/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon
 sips -Z 152 "$src" --out "$dst/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png"
 sips -Z 167 "$src" --out "$dst/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png"
 
+# Example command lists existing image dimensions:
+#
 # $ sips -g pixelWidth -g pixelHeight "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png"
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png
-#   pixelWidth: 40
-#   pixelHeight: 40
-# dmanpearl namer (firestore *$%) $ sips -g pixelWidth -g pixelHeight "ios/Runner/Assets.xcassets/AppIcon.appiconset/*"
-# Warning: ios/Runner/Assets.xcassets/AppIcon.appiconset/* not a valid file - skipping
-# dmanpearl namer (firestore *$%) $ for fi in ios/Runner/Assets.xcassets/AppIcon.appiconset/*; do sips -g pixelWidth -g pixelHeight "$fi"
-# for>
-# dmanpearl namer (firestore *$%) $ for fi in ios/Runner/Assets.xcassets/AppIcon.appiconset/*; do sips -g pixelWidth -g pixelHeight "$fi"; done
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
-#   pixelWidth: <nil>
-#   pixelHeight: <nil>
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png
-#   pixelWidth: 1024
-#   pixelHeight: 1024
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
-#   pixelWidth: 20
-#   pixelHeight: 20
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png
-#   pixelWidth: 40
-#   pixelHeight: 40
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png
-#   pixelWidth: 60
-#   pixelHeight: 60
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png
-#   pixelWidth: 29
-#   pixelHeight: 29
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png
-#   pixelWidth: 58
-#   pixelHeight: 58
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png
-#   pixelWidth: 87
-#   pixelHeight: 87
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png
-#   pixelWidth: 40
-#   pixelHeight: 40
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png
-#   pixelWidth: 80
-#   pixelHeight: 80
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png
-#   pixelWidth: 120
-#   pixelHeight: 120
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png
-#   pixelWidth: 120
-#   pixelHeight: 120
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png
-#   pixelWidth: 180
-#   pixelHeight: 180
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png
-#   pixelWidth: 76
-#   pixelHeight: 76
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png
-#   pixelWidth: 152
-#   pixelHeight: 152
-# /Users/dmanpearl/pixelmonks/flutter/namer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png
-#   pixelWidth: 167
-#   pixelHeight: 167
+#     ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png
+#       pixelWidth: 40
+#       pixelHeight: 40

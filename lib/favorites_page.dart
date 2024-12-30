@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'main.dart';
+import 'app_state.dart';
 import 'utils.dart';
 
 class FavoritesPage extends StatefulWidget {
@@ -12,7 +12,7 @@ class FavoritesPage extends StatefulWidget {
 class _FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<MyAppState>();
+    final appState = context.watch<AppState>();
 
     if (appState.favorites.isEmpty) {
       return Center(

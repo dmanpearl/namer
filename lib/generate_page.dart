@@ -2,7 +2,7 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'main.dart';
+import 'app_state.dart';
 import 'utils.dart';
 
 class BigCard extends StatelessWidget {
@@ -15,7 +15,7 @@ class BigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
+    var appState = context.watch<AppState>();
 
     final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!.copyWith(
@@ -56,7 +56,7 @@ class BigCard extends StatelessWidget {
 class GeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<MyAppState>();
+    final appState = context.watch<AppState>();
 
     IconData icon;
     if (appState.favorites.contains(appState.current)) {
@@ -100,7 +100,7 @@ class GeneratorPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: SizedBox(
-                width: 140, child: Image.asset('assets/images/namer.png')),
+                width: 140, child: Image.asset('assets/images/namer_cr.png')),
           ),
           Spacer(flex: 1),
         ],
@@ -117,7 +117,7 @@ class HistoryListView extends StatefulWidget {
 }
 
 class _HistoryListViewState extends State<HistoryListView> {
-  // Needed so that [MyAppState] can tell [AnimatedList] below to animate
+  // Needed so that [AppState] can tell [AnimatedList] below to animate
   // new items.
   final _key = GlobalKey();
 
@@ -133,7 +133,7 @@ class _HistoryListViewState extends State<HistoryListView> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<MyAppState>();
+    final appState = context.watch<AppState>();
     appState.historyListKey = _key;
 
     return ShaderMask(

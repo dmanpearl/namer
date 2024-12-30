@@ -1,127 +1,125 @@
-import 'package:english_words/english_words.dart';
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart'
+    hide EmailAuthProvider, PhoneAuthProvider;
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'app_state.dart';
 import 'favorites_page.dart';
 import 'generate_page.dart';
 import 'persist_local.dart';
 import 'settings_page.dart';
-import 'utils.dart';
+import 'src/authentication.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await sharedPrefs.init();
-  runApp(MyApp());
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => AppState(),
+    builder: ((context, child) => const MyApp()),
+  ));
 }
+
+// Add GoRouter configuration outside the App class
+final _router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => MyHomePage(),
+      routes: [
+        GoRoute(
+          path: 'sign-in',
+          builder: (context, state) {
+            return SignInScreen(
+              actions: [
+                ForgotPasswordAction(((context, email) {
+                  final uri = Uri(
+                    path: '/sign-in/forgot-password',
+                    queryParameters: <String, String?>{
+                      'email': email,
+                    },
+                  );
+                  context.push(uri.toString());
+                })),
+                AuthStateChangeAction(((context, state) {
+                  final user = switch (state) {
+                    SignedIn state => state.user,
+                    UserCreated state => state.credential.user,
+                    _ => null
+                  };
+                  if (user == null) {
+                    return;
+                  }
+                  if (state is UserCreated) {
+                    user.updateDisplayName(user.email!.split('@')[0]);
+                  }
+                  if (!user.emailVerified) {
+                    user.sendEmailVerification();
+                    const snackBar = SnackBar(
+                        content: Text(
+                            'Please check your email to verify your email address'));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                  context.pushReplacement('/');
+                })),
+              ],
+            );
+          },
+          routes: [
+            GoRoute(
+              path: 'forgot-password',
+              builder: (context, state) {
+                final arguments = state.uri.queryParameters;
+                return ForgotPasswordScreen(
+                  email: arguments['email'],
+                  headerMaxExtent: 200,
+                );
+              },
+            ),
+          ],
+        ),
+        GoRoute(
+          path: 'profile',
+          builder: (context, state) {
+            return ProfileScreen(
+              providers: const [],
+              actions: [
+                SignedOutAction((context) {
+                  context.pushReplacement('/');
+                }),
+              ],
+            );
+          },
+        ),
+      ],
+    ),
+  ],
+);
+// end of GoRouter configuration
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'Namer App',
-        theme: ThemeData(
-          useMaterial3: true,
-          // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyanAccent),
-        ),
-        home: MyHomePage(),
+    return MaterialApp.router(
+      title: 'Namer App',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyanAccent),
+        // buttonTheme: Theme.of(context).buttonTheme.copyWith(
+        //       highlightColor: Colors.deepPurple,
+        //     ),
+        // primarySwatch: Colors.deepPurple,
+        // textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      routerConfig: _router, // new
     );
-  }
-}
-
-class MyAppState extends ChangeNotifier {
-  // Initial values may be overwritten by stored shared preferences
-  WordPair _current = WordPair.random();
-  List<WordPair> _history = <WordPair>[];
-  List<WordPair> _favorites = <WordPair>[];
-  int _pairStyle = 0;
-
-  GlobalKey? historyListKey;
-
-  MyAppState() {
-    // Load stored state from shared preferences
-    final (cr, fv, hs, ps) = sharedPrefs.readAll();
-    if (cr != emptyWordPair) {
-      // Saved current is not empty, use it instead of the new random pair
-      current = cr;
-    }
-    current = _current; // Forces sharedPrefs.saveCurrent
-    _favorites = fv;
-    _history = hs;
-    pairStyle = ps;
-  }
-
-  // _current
-  WordPair get current => _current;
-  set current(WordPair value) {
-    _current = value;
-    sharedPrefs.saveCurrent(value);
-  }
-
-  void getNext() {
-    addHistory(current);
-    var animatedList = historyListKey?.currentState as AnimatedListState?;
-    animatedList?.insertItem(0);
-    current = WordPair.random(); // Generate next WordPair
-    notifyListeners();
-  }
-
-  // _history
-  List<WordPair> get history => _history;
-  // Insert the current pair into history, and limit the total size of the history buffer.
-  void addHistory(WordPair pair) {
-    const historyMax = 100;
-    if (_history.length >= historyMax) {
-      _history.removeRange(historyMax - 1, _history.length);
-    }
-    _history.insert(0, current);
-    sharedPrefs.saveHistory(_history);
-    notifyListeners();
-  }
-
-  void clearHistory() {
-    _history = [];
-    sharedPrefs.saveHistory(_history);
-    notifyListeners();
-  }
-
-  // _favorites
-  List<WordPair> get favorites => _favorites;
-  void toggleFavorite([WordPair? pair]) {
-    pair = pair ?? current;
-    if (_favorites.contains(pair)) {
-      _favorites.remove(pair);
-    } else {
-      _favorites.add(pair);
-    }
-    sharedPrefs.saveFavorites(_favorites);
-    notifyListeners();
-  }
-
-  List<WordPair> removeFavorite(WordPair pair) {
-    _favorites.removeWhere((favorite) => favorite == pair);
-    sharedPrefs.saveFavorites(_favorites);
-    notifyListeners();
-    return _favorites;
-  }
-
-  void clearFavorites() {
-    _favorites = [];
-    sharedPrefs.saveFavorites(_favorites);
-    notifyListeners();
-  }
-
-  // _pairStyle
-  int get pairStyle => _pairStyle;
-  set pairStyle(int value) {
-    _pairStyle = value;
-    sharedPrefs.savePairStyle(value);
-    notifyListeners();
   }
 }
 
@@ -141,6 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
       GeneratorPage(),
       FavoritesPage(),
       SettingsPage(),
+      LoginPage(),
     ];
     if (selectedIndex < 0 || selectedIndex >= pages.length) {
       throw UnimplementedError('no widget for selected index: $selectedIndex');
@@ -177,6 +176,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     icon: Icon(Icons.settings),
                     label: Text('Settings'),
                   ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.account_circle),
+                    label: Text('Account'),
+                  ),
                 ],
                 selectedIndex: selectedIndex,
                 onDestinationSelected: (value) {
@@ -191,5 +194,27 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     });
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login'),
+      ),
+      body: ListView(
+        children: <Widget>[
+          Consumer<AppState>(
+            builder: (context, appState, _) => AuthFunc(
+                loggedIn: appState.loggedIn,
+                signOut: () {
+                  FirebaseAuth.instance.signOut();
+                }),
+          ),
+        ],
+      ),
+    );
   }
 }
