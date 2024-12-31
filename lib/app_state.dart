@@ -19,7 +19,7 @@ var logger = getLogger();
 
 class AppState extends ChangeNotifier {
   // Initial values may be overwritten by stored shared preferences
-  WordPair _current = WordPair.random();
+  WordPair _current = emptyWordPair;
   List<WordPair> _history = <WordPair>[];
   List<WordPair> _favorites = <WordPair>[];
   int _pairStyle = 0;
@@ -37,14 +37,18 @@ class AppState extends ChangeNotifier {
   AppState() {
     // Load stored state from shared preferences
     final (cr, fv, hs, ps) = sharedPrefs.readAll();
-    if (cr != emptyWordPair) {
-      // Saved current is not empty, use it instead of the new random pair
-      current = cr;
+    if (cr == emptyWordPair) {
+      // Use a new random WordPair, since persistent storage is empty.
+      _current = WordPair.random();
+      sharedPrefs.saveCurrent(_current);
+    } else {
+      // Use current from persistent storage.
+      _current = cr;
     }
     current = _current; // Forces sharedPrefs.saveCurrent
     _favorites = fv;
     _history = hs;
-    pairStyle = ps;
+    _pairStyle = ps;
     initFirebase();
   }
 
@@ -69,10 +73,18 @@ class AppState extends ChangeNotifier {
   // _history
   List<WordPair> get history => _history;
   set history(List<WordPair> values) {
-    if (_history != values) _history = values;
-    sharedPrefs.saveHistory(values);
-    if (loggedIn) {
-      remoteSaveHistory(values);
+    if (!wordPairListsEqual(_history, values)) {
+      final int oldLen = _history.length;
+      _history = values;
+      var animatedList = historyListKey?.currentState as AnimatedListState?;
+      for (int i = 0; i < values.length - oldLen; i++) {
+        animatedList?.insertItem(0); // Insert new items
+      }
+      sharedPrefs.saveHistory(values);
+      if (loggedIn) {
+        remoteSaveHistory(values);
+      }
+      notifyListeners();
     }
   }
 
@@ -102,10 +114,13 @@ class AppState extends ChangeNotifier {
   // _favorites
   List<WordPair> get favorites => _favorites;
   set favorites(List<WordPair> values) {
-    if (_favorites != values) _favorites = values;
-    sharedPrefs.saveFavorites(values);
-    if (loggedIn) {
-      remoteSaveFavorites(values);
+    if (!wordPairListsEqual(_favorites, values)) {
+      _favorites = values;
+      sharedPrefs.saveFavorites(values);
+      if (loggedIn) {
+        remoteSaveFavorites(values);
+      }
+      notifyListeners();
     }
   }
 
@@ -215,7 +230,7 @@ class AppState extends ChangeNotifier {
           final data = doc.data() as Map<String, dynamic>;
           final incoming =
               deserializeMany(List<String>.from(data['history'] as List));
-          if (listEquals(history, incoming)) {
+          if (wordPairListsEqual(history, incoming)) {
             continue;
           }
           logger.i(
@@ -235,7 +250,7 @@ class AppState extends ChangeNotifier {
           final data = doc.data() as Map<String, dynamic>;
           final incoming =
               deserializeMany(List<String>.from(data['favorites'] as List));
-          if (listEquals(favorites, incoming)) {
+          if (wordPairListsEqual(favorites, incoming)) {
             continue;
           }
           logger.i(

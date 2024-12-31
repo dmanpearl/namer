@@ -20,3 +20,18 @@ String pairToString(WordPair pair, int styleIdx) {
   final String pairStyle = pairStyles[styleIdx];
   return pairStyleMap[pairStyle]!(pair);
 }
+
+bool wordPairsEqual(WordPair p1, WordPair p2) =>
+    p1.first == p2.first && p1.second == p2.second;
+
+bool wordPairListsEqual(List<WordPair> l1, List<WordPair> l2) {
+  if (l1.length != l2.length) {
+    return false;
+  }
+  for (int i = 0; i < l1.length; i++) {
+    if (!wordPairsEqual(l1[i], l2[i])) {
+      return false;
+    }
+  }
+  return true;
+}

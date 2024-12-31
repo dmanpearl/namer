@@ -108,14 +108,17 @@ class _SettingsPageState extends State<SettingsPage> {
               return menuItems;
             },
             initialValue: appState.pairStyle,
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(19))),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
-                child: StyleMenuItem(
-                  pairStyle: pairStyles[selectedIndex],
-                  example: example,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: 180),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(19))),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+                  child: StyleMenuItem(
+                    pairStyle: pairStyles[selectedIndex],
+                    example: example,
+                  ),
                 ),
               ),
             ),
@@ -166,6 +169,7 @@ class StyleMenuItem extends StatelessWidget {
         // Title
         Text(
           pairStyle,
+          softWrap: false,
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: theme.primaryColor,
@@ -174,7 +178,8 @@ class StyleMenuItem extends StatelessWidget {
 
         // Subtitle
         Text(
-          "ex: $example",
+          "example: $example",
+          softWrap: false,
           style: TextStyle(color: theme.primaryColor),
           textScaler: TextScaler.linear(0.7),
         ),

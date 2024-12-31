@@ -31,7 +31,8 @@ A Flutter/Dart app to choose and bookmark compound names based on Flutter's tuto
 # TODO
 
 [✓] Use logging instead of print.
-[ ] On app startup, prioritize sync from Firestore over Perstent Storage.
+[✓] On app startup, prioritize sync from Firestore over Perstent Storage.
+[ ] Test
 [ ] Provide Navigate from Signout screen back to main.
 [ ] Deploy to Apple App Store.
 
