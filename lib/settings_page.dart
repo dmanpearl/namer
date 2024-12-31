@@ -174,7 +174,7 @@ class StyleMenuItem extends StatelessWidget {
 
         // Subtitle
         Text(
-          "example: $example",
+          "ex: $example",
           style: TextStyle(color: theme.primaryColor),
           textScaler: TextScaler.linear(0.7),
         ),

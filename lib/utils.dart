@@ -2,39 +2,21 @@ import 'package:english_words/english_words.dart';
 
 final WordPair emptyWordPair = WordPair("m", "t");
 
-const pairStyles = [
-  "none",
-  "camelCase",
-  "lowercase",
-  "PascalCase",
-  "snake_case",
-  "SCREAMING_SNAKE",
-  "kebab-case",
-  "UPPERCASE",
-  "space cace",
-];
+final Map<String, Function> pairStyleMap = {
+  "none": (WordPair pair) => pair.asString,
+  "camelCase": (WordPair pair) => pair.asCamelCase,
+  "lowercase": (WordPair pair) => pair.asLowerCase,
+  "PascalCase": (WordPair pair) => pair.asPascalCase,
+  "snake_case": (WordPair pair) => pair.asSnakeCase,
+  "SCREAMING_SNAKE": (WordPair pair) => pair.asSnakeCase.toUpperCase(),
+  "kebab-case": (WordPair pair) => pair.asSnakeCase.replaceAll("_", "-"),
+  "UPPERCASE": (WordPair pair) => pair.asUpperCase,
+  "space cace": (WordPair pair) => "${pair.first} ${pair.second}",
+  "DnD case": (WordPair pair) => "${pair.first} & ${pair.second}",
+};
+final pairStyles = pairStyleMap.keys.toList();
 
 String pairToString(WordPair pair, int styleIdx) {
-  switch (styleIdx) {
-    case 0:
-      return pair.asString;
-    case 1:
-      return pair.asCamelCase;
-    case 2:
-      return pair.asLowerCase;
-    case 3:
-      return pair.asPascalCase;
-    case 4:
-      return pair.asSnakeCase;
-    case 5:
-      return pair.asSnakeCase.toUpperCase();
-    case 6:
-      return pair.asSnakeCase.replaceAll("_", "-");
-    case 7:
-      return pair.asUpperCase;
-    case 8:
-      return "${pair.first} ${pair.second}";
-    default:
-      throw UnimplementedError('no option for style index: $styleIdx');
-  }
+  final String pairStyle = pairStyles[styleIdx];
+  return pairStyleMap[pairStyle]!(pair);
 }
