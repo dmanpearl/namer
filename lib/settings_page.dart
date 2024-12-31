@@ -109,7 +109,7 @@ class _SettingsPageState extends State<SettingsPage> {
             },
             initialValue: appState.pairStyle,
             child: ConstrainedBox(
-              constraints: BoxConstraints(minWidth: 180),
+              constraints: BoxConstraints(minWidth: 170),
               child: Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(19))),

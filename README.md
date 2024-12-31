@@ -28,13 +28,32 @@ A Flutter/Dart app to choose and bookmark compound names based on Flutter's tuto
 
 	iPhone > Settings > General > VPN & Device Management > Developer App > you.name@domain.com > Allow Apps from... > Allow
 
+# TESTS
+
+## Run all tests
+
+	flutter test test/*
+
+or
+
+	flutter test
+
+## Run individual tests
+
+	flutter test test/utils_test.dart
+	flutter test test/utils_serialize_test.dart
+
 # TODO
 
 [✓] Use logging instead of print.
 [✓] On app startup, prioritize sync from Firestore over Perstent Storage.
-[ ] Test
+[✓] Unit tests.
 [ ] Provide Navigate from Signout screen back to main.
+[ ] Bug: Failed login causes app freeze (i.e. bad password)
+[ ] Add visual indication as to login status (perhaps different auth icon in sidebar).
+[ ] Host on Github.
 [ ] Deploy to Apple App Store.
+[ ] Add widget tap and/or scroll gesture tests. See widgets.dart and widget_test.dart.
 
 # Flutter resources
 
