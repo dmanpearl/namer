@@ -1,8 +1,25 @@
 # namer
 
-A Flutter/Dart app to choose and bookmark compound names based on Flutter's tutorial
+A **Flutter/Dart** app to choose and bookmark compound names based on Flutter's tutorial with
+additional functionality such as **real-time data-syncing between multiple app instances**.
 
-# Run on physical iOS iPhone device from command line:
+Additional features in this project:
+
+- **Unit Tests**: Implements testing of various functionality.
+
+- **Shared Preferences**: Implements persistent storage for all settings (current
+  word-pair, history, favorites, style).
+
+- **Firestore**: Uses Google Firebase to store all settings and listen for real-time
+  updates. This feature is the main reason for implementing the 'namer' app.
+
+- **Favorites**: Implements a Favorites page with multiple methods for setting
+  and unsetting Favorite word pairs.
+
+- **Multi-Platform**: Release builds tested on iOS and Mac. This project is also
+  intended to support Android, Windows, and Linux.
+
+# Run on physical iOS or macos device from command line:
 
 1. List devices
 
@@ -21,6 +38,8 @@ A Flutter/Dart app to choose and bookmark compound names based on Flutter's tuto
 			Launching lib/main.dart on David’s iPhone in release mode...
 			Automatically signing iOS for device deployment using specified development team in Xcode project: 33V4F5LWJ6
 			Running Xcode build...
+
+	or
 
 		flutter run --release -d "macOS"
 
@@ -57,13 +76,13 @@ or
 
 # TODO
 
-[✓] Use logging instead of print.
-[✓] On app startup, prioritize sync from Firestore over Perstent Storage.
-[✓] Unit tests.
-[✓] Provide Navigate from Signout screen back to main.
-[✓] Add visual indication as to login status via auth icon in sidebar.
-[ ] Host on Github.
-[ ] Add unit tests widget tap/scroll gestures. See widgets.dart and widget_test.dart.
+- [x] Use logging instead of print.
+- [x] On app startup, prioritize sync from Firestore over Perstent Storage.
+- [x] Unit tests.
+- [x] Provide Navigate from Signout screen back to main.
+- [x] Add visual indication as to login status via auth icon in sidebar.
+- [x] Host on Github.
+- [ ] Add unit tests widget tap/scroll gestures. See widgets.dart and widget_test.dart.
 
 # Flutter resources
 
