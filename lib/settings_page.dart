@@ -133,7 +133,7 @@ class _SettingsPageState extends State<SettingsPage> {
         // Settings
         Padding(
           padding: const EdgeInsets.all(20),
-          child: Text("Settings:", style: theme.textTheme.titleLarge),
+          child: Text("Settings", style: theme.textTheme.titleLarge),
         ),
 
         DataTable(

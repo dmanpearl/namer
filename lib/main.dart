@@ -35,6 +35,10 @@ final _router = GoRouter(
           path: 'sign-in',
           builder: (context, state) {
             return SignInScreen(
+              headerBuilder: (context, constraints, shrinkOffset) =>
+                  Row(children: [BackButton()]),
+              sideBuilder: (context, constraints) =>
+                  Column(children: [BackButton()]),
               actions: [
                 ForgotPasswordAction(((context, email) {
                   final uri = Uri(
@@ -87,6 +91,7 @@ final _router = GoRouter(
           builder: (context, state) {
             return ProfileScreen(
               providers: const [],
+              appBar: AppBar(leading: BackButton(), title: Text('My Profile')),
               actions: [
                 SignedOutAction((context) {
                   context.pushReplacement('/');
@@ -99,6 +104,20 @@ final _router = GoRouter(
     ),
   ],
 );
+
+class BackButton extends StatelessWidget {
+  const BackButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () => Navigator.of(context).pop(),
+      icon: Icon(Icons.chevron_left),
+    );
+  }
+}
 // end of GoRouter configuration
 
 class MyApp extends StatelessWidget {
@@ -203,6 +222,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
+        centerTitle: false,
       ),
       body: ListView(
         children: <Widget>[

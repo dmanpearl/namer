@@ -48,12 +48,10 @@ or
 [✓] Use logging instead of print.
 [✓] On app startup, prioritize sync from Firestore over Perstent Storage.
 [✓] Unit tests.
-[ ] Provide Navigate from Signout screen back to main.
-[ ] Bug: Failed login causes app freeze (i.e. bad password)
+[✓] Provide Navigate from Signout screen back to main.
 [ ] Add visual indication as to login status (perhaps different auth icon in sidebar).
 [ ] Host on Github.
-[ ] Deploy to Apple App Store.
-[ ] Add widget tap and/or scroll gesture tests. See widgets.dart and widget_test.dart.
+[ ] Add unit tests widget tap/scroll gestures. See widgets.dart and widget_test.dart.
 
 # Flutter resources
 
