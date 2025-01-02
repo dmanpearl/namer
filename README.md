@@ -30,6 +30,16 @@ A Flutter/Dart app to choose and bookmark compound names based on Flutter's tuto
 
 	iPhone > Settings > General > VPN & Device Management > Developer App > you.name@domain.com > Allow Apps from... > Allow
 
+1. Clean
+
+		flutter clean
+
+# Make Icons
+
+Note: Currently implemented for ios and macos. Update "make-icons" to add additional platforms.
+
+	tools/make-icons assets/images/namer.png .
+
 # TESTS
 
 ## Run all tests

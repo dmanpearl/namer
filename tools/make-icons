@@ -26,6 +26,8 @@ if [ ! -d "$dst" ]; then
   exit 1
 fi
 
+# ios
+
 sips -Z 1024 "$src" --out "$dst/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png"
 sips -Z 20 "$src" --out "$dst/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png"
 sips -Z 40 "$src" --out "$dst/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png"
@@ -41,6 +43,16 @@ sips -Z 180 "$src" --out "$dst/ios/Runner/Assets.xcassets/AppIcon.appiconset/Ico
 sips -Z 76 "$src" --out "$dst/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png"
 sips -Z 152 "$src" --out "$dst/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png"
 sips -Z 167 "$src" --out "$dst/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png"
+
+# macos
+
+sips -Z 16 "$src" --out "$dst/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png"
+sips -Z 1024 "$src" --out "$dst/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png"
+sips -Z 256 "$src" --out "$dst/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png"
+sips -Z 64 "$src" --out "$dst/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_64.png"
+sips -Z 512 "$src" --out "$dst/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png"
+sips -Z 128 "$src" --out "$dst/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_128.png"
+sips -Z 32 "$src" --out "$dst/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_32.png"
 
 # Example command lists existing image dimensions:
 #
