@@ -15,7 +15,7 @@ class BigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<AppState>();
+    final appState = context.watch<AppState>();
 
     final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!.copyWith(

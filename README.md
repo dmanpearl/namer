@@ -22,6 +22,8 @@ A Flutter/Dart app to choose and bookmark compound names based on Flutter's tuto
 			Automatically signing iOS for device deployment using specified development team in Xcode project: 33V4F5LWJ6
 			Running Xcode build...
 
+		flutter run --release -d "macOS"
+
 1. Enable trust on device
 
 	If device displays: "Untrusted Developer: Your device management settings to not allow apps from developer..."
@@ -49,7 +51,7 @@ or
 [✓] On app startup, prioritize sync from Firestore over Perstent Storage.
 [✓] Unit tests.
 [✓] Provide Navigate from Signout screen back to main.
-[ ] Add visual indication as to login status (perhaps different auth icon in sidebar).
+[✓] Add visual indication as to login status via auth icon in sidebar.
 [ ] Host on Github.
 [ ] Add unit tests widget tap/scroll gestures. See widgets.dart and widget_test.dart.
 

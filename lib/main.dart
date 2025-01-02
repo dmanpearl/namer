@@ -176,6 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     return LayoutBuilder(builder: (context, constraints) {
+      final appState = context.watch<AppState>();
       return Scaffold(
         body: Row(
           children: [
@@ -196,8 +197,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     label: Text('Settings'),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(Icons.account_circle),
-                    label: Text('Account'),
+                    icon: Icon(
+                        appState.loggedIn ? Icons.account_circle : Icons.login),
+                    label: Text(appState.loggedIn ? 'Account' : 'Login'),
                   ),
                 ],
                 selectedIndex: selectedIndex,
